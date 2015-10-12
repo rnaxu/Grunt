@@ -22,7 +22,6 @@
     "grunt-csscomb": "^3.0.0",
     "grunt-csso": "^0.6.3",
     "grunt-spritesmith": "^4.7.1",
-    "grunt-styledocco": "^0.2.1",
     "jit-grunt": "^0.9.1",
     "time-grunt": "^1.2.1"
   },

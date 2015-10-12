@@ -16,7 +16,9 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   require('jit-grunt')(grunt, {
     // sprite
-    sprite: 'grunt-spritesmith'
+    sprite: 'grunt-spritesmith',
+    // styledocco
+    styledocco: 'grunt-styledocco'
   });
 
 
@@ -184,7 +186,7 @@ module.exports = function (grunt) {
       server: {
         options: {
           port: 8000,
-          base: 'dist'
+          base: 'dist/'
         }
       }
     }
@@ -197,7 +199,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build:js', ['concat', 'uglify']);
   grunt.registerTask('build:img', ['imagemin']);
   grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
-  //grunt.registerTask('styleguide', ['build', 'styledocco']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('w', ['connect', 'watch']);
 };
