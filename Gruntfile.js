@@ -17,8 +17,6 @@ module.exports = function (grunt) {
   require('jit-grunt')(grunt, {
     // sprite
     sprite: 'grunt-spritesmith',
-    // styledocco
-    styledocco: 'grunt-styledocco'
   });
 
 
