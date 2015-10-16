@@ -42,12 +42,16 @@ module.exports = function (grunt) {
     assemble: {
       options: {
         layoutdir: '<%= path.html_src %>layouts/',
-        partials: '<%= path.html_src %>partials/*.hbs'
+        partials: '<%= path.html_src %>partials/*.hbs',
+        helpers: ['handlebars-helper-prettify'],
+        prettify: {
+          indent: 4
+        }
       },
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= path.html_src %>pages',
+          cwd: '<%= path.html_src %>pages/',
           src: '**/*.hbs',
           dest: '<%= path.dist %>'
         }]
@@ -79,7 +83,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= path.scss_src %>',
             src: ['*.scss'],
-            dest: '<%= path.dist %>css',
+            dest: '<%= path.dist %>css/',
             ext: '.css'
           }
         ]
@@ -98,18 +102,18 @@ module.exports = function (grunt) {
     csscomb: {
       app: {
         expand: true,
-        cwd: '<%= path.dist %>css',
+        cwd: '<%= path.dist %>css/',
         src: ['*.css'],
-        dest: '<%= path.dist %>css',
+        dest: '<%= path.dist %>css/',
       }
     },
 
     csso: {
       app: {
         expand: true,
-        cwd: '<%= path.dist %>css',
+        cwd: '<%= path.dist %>css/',
         src: ['*.css'],
-        dest: '<%= path.dist %>css',
+        dest: '<%= path.dist %>css/',
         options: {
           restructure: false
         }
@@ -141,7 +145,7 @@ module.exports = function (grunt) {
 
 
     /* img */
-    // なぜかうまくいかない
+    // なぜかうまくいかないときがある
     imagemin: {
       target: {
         files: [{
@@ -153,6 +157,7 @@ module.exports = function (grunt) {
       }
     },
 
+    // imageminがうまくいかないとき用
     copy: {
       img: {
         files: [{
@@ -202,7 +207,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:html', ['assemble']);
   grunt.registerTask('build:css', ['sprite', 'sass', 'autoprefixer', 'csscomb', 'csso']);
   grunt.registerTask('build:js', ['concat', 'uglify']);
-  grunt.registerTask('build:img', ['copy:img']);
+  grunt.registerTask('build:img', ['imagemin']);
   grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('w', ['connect', 'watch']);
