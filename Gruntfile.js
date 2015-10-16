@@ -26,7 +26,6 @@ module.exports = function (grunt) {
     path: {
       src: 'src/',
       dist: 'dist/',
-      tmp: 'tmp/',
       html_src: 'src/hbs/',
       scss_src: 'src/scss/',
       js_src: 'src/js/',
@@ -36,7 +35,7 @@ module.exports = function (grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
 
-    clean: ['<%= path.tmp %>', '<%= path.dist %>'],
+    clean: ['<%= path.dist %>'],
 
 
     /* html */
@@ -80,7 +79,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= path.scss_src %>',
             src: ['*.scss'],
-            dest: '<%= path.tmp %>css',
+            dest: '<%= path.dist %>css',
             ext: '.css'
           }
         ]
@@ -92,23 +91,23 @@ module.exports = function (grunt) {
         browsers: ['last 2 version', 'ie 7', 'ie 8', 'ie 9']
       },
       file: {
-        src: '<%= path.tmp %>css/*.css'
+        src: '<%= path.dist %>css/*.css'
       }
     },
 
     csscomb: {
       app: {
         expand: true,
-        cwd: '<%= path.tmp %>css',
+        cwd: '<%= path.dist %>css',
         src: ['*.css'],
-        dest: '<%= path.tmp %>css',
+        dest: '<%= path.dist %>css',
       }
     },
 
     csso: {
       app: {
         expand: true,
-        cwd: '<%= path.tmp %>css',
+        cwd: '<%= path.dist %>css',
         src: ['*.css'],
         dest: '<%= path.dist %>css',
         options: {
@@ -122,7 +121,7 @@ module.exports = function (grunt) {
     concat: {
       all: {
         src: ['<%= path.js_src %>*.js'],
-        dest: '<%= path.tmp %>js/all.js'
+        dest: '<%= path.dist %>js/all.js'
       }
     },
 
@@ -135,7 +134,7 @@ module.exports = function (grunt) {
       },
       app: {
         files: {
-          '<%= path.dist %>js/all.js': '<%= path.tmp %>js/all.js'
+          '<%= path.dist %>js/all.js': '<%= path.dist %>js/all.js'
         }
       }
     },
