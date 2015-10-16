@@ -16,7 +16,7 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   require('jit-grunt')(grunt, {
     // sprite
-    sprite: 'grunt-spritesmith',
+    sprite: 'grunt-spritesmith'
   });
 
 
@@ -43,11 +43,7 @@ module.exports = function (grunt) {
     assemble: {
       options: {
         layoutdir: '<%= path.html_src %>layouts/',
-        partials: '<%= path.html_src %>partials/*.hbs',
-        prettify: {
-          indent: 4,
-          unformatted: ['br', 'strong', 'span', 'a', 'sub', 'sup', 'b', 'i', 'u']
-        },
+        partials: '<%= path.html_src %>partials/*.hbs'
       },
       dist: {
         files: [{
@@ -146,13 +142,25 @@ module.exports = function (grunt) {
 
 
     /* img */
+    // なぜかうまくいかない
     imagemin: {
-      noraml: {
+      target: {
         files: [{
           expand: true,
           cwd: '<%= path.img_src %>',
           src: ['**/*.{png,jpg}'],
           dest: '<%= path.dist %>img/'
+        }]
+      }
+    },
+
+    copy: {
+      img: {
+        files: [{
+            expand: true,
+            cwd: '<%= path.img_src %>',
+            src: ['**/*.{png,jpg}'],
+            dest: '<%= path.dist %>img/'
         }]
       }
     },
@@ -195,7 +203,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:html', ['assemble']);
   grunt.registerTask('build:css', ['sprite', 'sass', 'autoprefixer', 'csscomb', 'csso']);
   grunt.registerTask('build:js', ['concat', 'uglify']);
-  grunt.registerTask('build:img', ['imagemin']);
+  grunt.registerTask('build:img', ['copy:img']);
   grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('w', ['connect', 'watch']);
