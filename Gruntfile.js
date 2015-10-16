@@ -39,6 +39,7 @@ module.exports = function (grunt) {
 
 
     /* html */
+    
     assemble: {
       options: {
         layoutdir: '<%= path.hbs_src %>layouts/',
