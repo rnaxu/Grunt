@@ -39,7 +39,6 @@ module.exports = function (grunt) {
 
 
     /* html */
-    
     assemble: {
       options: {
         layoutdir: '<%= path.hbs_src %>layouts/',
@@ -62,7 +61,6 @@ module.exports = function (grunt) {
 
 
     /* css */
-
     // spriteファイルの数だけタスクを記述
     sprite: {
       all: {
@@ -123,7 +121,6 @@ module.exports = function (grunt) {
 
 
     /* js */
-
     // 生成したいファイルの数だけタスクを記述
     concat: {
       options : {
@@ -165,7 +162,6 @@ module.exports = function (grunt) {
 
 
     /* img */
-
     // なぜかうまくいかないときがある
     imagemin: {
       all: {
