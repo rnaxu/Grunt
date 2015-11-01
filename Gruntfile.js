@@ -15,8 +15,6 @@ module.exports = function (grunt) {
   // manage
   require('time-grunt')(grunt);
   require('jit-grunt')(grunt, {
-    // sprite
-    sprite: 'grunt-spritesmith'
   });
 
 
@@ -25,17 +23,17 @@ module.exports = function (grunt) {
 
     path: {
       src: 'src/',
+      tmp: 'tmp/',
       dist: 'dist/',
       hbs_src: 'src/hbs/',
       scss_src: 'src/scss/',
       js_src: 'src/js/',
-      img_src: 'src/img/',
-      sprite_src: 'src/sprite/'
+      img_src: 'src/img/'
     },
 
     pkg: grunt.file.readJSON('package.json'),
 
-    clean: ['<%= path.dist %>'],
+    clean: ['<%= path.tmp %>', '<%= path.dist %>'],
 
 
     /* html */
@@ -43,7 +41,7 @@ module.exports = function (grunt) {
       options: {
         layoutdir: '<%= path.hbs_src %>layouts/',
         partials: ['<%= path.hbs_src %>partials/**/*.hbs'],
-        data: ['<%= path.hbs_src %>data/**/*.{json,yml}'],
+        data: ['<%= path.hbs_src %>data/**/*.yml'],
         helpers: ['handlebars-helper-prettify'],
         prettify: {
           indent: 4
@@ -61,17 +59,6 @@ module.exports = function (grunt) {
 
 
     /* css */
-    // spriteファイルの数だけタスクを記述
-    sprite: {
-      all: {
-        src: ['<%= path.sprite_src %>*.png'],
-        dest: '<%= path.dist %>img/sprite.png',
-        imgPath: '../img/sprite.png',
-        destCss: '<%= path.scss_src %>module/_sprite.scss',
-        padding: 5
-      }
-    },
-
     sass: {
       options: {
         style: 'compact',
@@ -83,7 +70,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= path.scss_src %>',
           src: ['**/*.scss'],
-          dest: '<%= path.dist %>css/',
+          dest: '<%= path.tmp %>css/',
           ext: '.css'
         }]
       },
@@ -93,29 +80,41 @@ module.exports = function (grunt) {
       options: {
         browsers: ['last 2 version', 'ie 7', 'ie 8', 'ie 9']
       },
-      all: {
-        src: '<%= path.dist %>css/**/*.css'
+      _005: {
+        src: '<%= path.tmp %>css/**/*.css'
       }
     },
 
     csscomb: {
-      all: {
+      _005: {
         expand: true,
-        cwd: '<%= path.dist %>css/',
+        cwd: '<%= path.tmp %>css/',
         src: ['**/*.css'],
-        dest: '<%= path.dist %>css/',
+        dest: '<%= path.tmp %>css/'
+      },
+      source006: {
+        expand: true,
+        cwd: '<%= path.src %>',
+        src: ['006/**/*.css'],
+        dest: '<%= path.tmp %>'
       }
     },
 
     csso: {
-      all: {
+      options: {
+        restructure: false
+      },
+      _005: {
         expand: true,
-        cwd: '<%= path.dist %>css/',
+        cwd: '<%= path.tmp %>css/',
         src: ['**/*.css'],
-        dest: '<%= path.dist %>css/',
-        options: {
-          restructure: false
-        }
+        dest: '<%= path.tmp %>css/',
+      },
+      source006: {
+        expand: true,
+        cwd: '<%= path.tmp %>',
+        src: ['006/**/*.css'],
+        dest: '<%= path.tmp %>'
       }
     },
 
@@ -126,13 +125,17 @@ module.exports = function (grunt) {
       options : {
         sourceMap :true
       },
-      all: {
+      _005: {
         src: ['<%= path.js_src %>*.js'],
-        dest: '<%= path.dist %>js/all.js'
+        dest: '<%= path.tmp %>js/all.js'
       },
-      sample: {
-        src: ['<%= path.js_src %>huge.js', '<%= path.js_src %>hoge.js'],
-        dest: '<%= path.dist %>js/sample.js'
+      pc: {
+        src: ['<%= path.js_src %>hage.js', '<%= path.js_src %>hoge.js'],
+        dest: '<%= path.tmp %>006/js/all.js'
+      },
+      sp: {
+        src: ['<%= path.js_src %>*.js'],
+        dest: '<%= path.tmp %>006/s/js/all.js'
       }
     },
 
@@ -142,65 +145,75 @@ module.exports = function (grunt) {
         sourceMap : true,
         sourceMapIncludeSources : true
       },
-      all: {
+      _005: {
         options: {
-          sourceMapIn : ['<%= path.dist %>js/all.js.map']
+          sourceMapIn : ['<%= path.tmp %>js/all.js.map']
         },
         files: {
-          '<%= path.dist %>js/all.js': ['<%= path.dist %>js/all.js']
+          '<%= path.tmp %>js/all.js': ['<%= path.tmp %>js/all.js']
         }
       },
-      sample: {
+      pc: {
         options: {
-          sourceMapIn : ['<%= path.dist %>js/sample.js.map']
+          sourceMapIn : ['<%= path.tmp %>006/js/all.js.map']
         },
         files: {
-          '<%= path.dist %>js/sample.js': ['<%= path.dist %>js/sample.js']
+          '<%= path.tmp %>006/js/all.js': ['<%= path.tmp %>006/js/all.js']
+        }
+      },
+      sp: {
+        options: {
+          sourceMapIn : ['<%= path.tmp %>006/s/js/all.js.map']
+        },
+        files: {
+          '<%= path.tmp %>006/s/js/all.js': ['<%= path.tmp %>006/s/js/all.js']
         }
       }
     },
 
 
-    /* img */
-    // なぜかうまくいかないときがある
-    imagemin: {
-      all: {
-        files: [{
-          expand: true,
-          cwd: '<%= path.img_src %>',
-          src: ['**/*.{png,jpg}'],
-          dest: '<%= path.dist %>img/'
-        }]
-      }
-    },
-
-    // imageminがうまくいかないとき用
     copy: {
+      /* img */
       img: {
         expand: true,
         cwd: '<%= path.img_src %>',
         src: ['**/*.{png,jpg}'],
-        dest: '<%= path.dist %>img/'
-      }
+        dest: '<%= path.dist %>'
+      },
+      /* css,jsをそれぞれのディレクトリにコピー */
+      css_js_005: {
+        expand: true,
+        cwd: '<%= path.tmp %>',
+        src: ['css/all.css', 'js/all.js', 'js/all.js.map'],
+        dest: '<%= path.dist %>005/s'
+      },
+      css_js_007: {
+        expand: true,
+        cwd: '<%= path.tmp %>006/',
+        src: ['**/css/all.css', '**/js/all.js', '**/js/all.js.map'],
+        dest: '<%= path.dist %>007/'
+      },
+      css_js_008: {
+        expand: true,
+        cwd: '<%= path.tmp %>006/',
+        src: ['css/all.css', 'js/all.js', 'js/all.js.map'],
+        dest: '<%= path.dist %>008/'
+      },
     },
 
 
     watch: {
       html: {
-        files: ['**/*.{hbs,json,yml}'],
+        files: ['src/**/*.{hbs,yml}'],
         tasks: ['build:html']
       },
       css: {
-        files: ['**/*.scss'],
+        files: ['src/**/*.{css,scss}'],
         tasks: ['build:css'],
       },
       js: {
-        files: ['**/*.js'],
+        files: ['src/**/*.js'],
         tasks: ['build:js']
-      },
-      img: {
-        files: ['**/*.{png,jpg}'],
-        tasks: ['build:img']
       },
       options: {
         livereload: true
@@ -220,10 +233,10 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('build:html', ['assemble']);
-  grunt.registerTask('build:css', ['sprite', 'sass', 'autoprefixer', 'csscomb', 'csso']);
+  grunt.registerTask('build:css', ['sass', 'autoprefixer', 'csscomb', 'csso']);
   grunt.registerTask('build:js', ['concat', 'uglify']);
-  grunt.registerTask('build:img', ['imagemin']);
-  grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
+  //grunt.registerTask('build:img', ['copy:img']);
+  grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'copy']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('w', ['connect', 'watch']);
 };
