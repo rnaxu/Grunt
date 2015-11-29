@@ -222,7 +222,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build:html', ['assemble']);
   grunt.registerTask('build:css', ['sprite', 'sass', 'autoprefixer', 'csscomb', 'csso']);
   grunt.registerTask('build:js', ['concat', 'uglify']);
-  grunt.registerTask('build:img', ['imagemin']);
+  grunt.registerTask('build:img', ['copy']);
   grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('w', ['connect', 'watch']);

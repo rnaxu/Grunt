@@ -1,2 +1,2 @@
-$(function(){var a="hage";console.log(a)}),$(function(){var a="hoge";console.log(a)}),$(function(){var a="huge";console.log(a)});
+$(function(){function a(){var a={};if(1<location.hash.length)for(var b=location.hash.substring(1),c=b.split("&"),d=0;d<c.length;d++){var e=c[d].split("="),f=e[0],g=e[1];a[f]=g}return a}function b(a){var b,c="",d=0;for(b in a)0===d?c=""+b+"="+a[b]:c+="&"+b+"="+a[b],d++;return c}var c=a(),d=b(c);$(".js-test").on("click",function(){history.replaceState("test",null,"#"+d)})}),$(function(){var a="hoge";console.log(a)}),$(function(){var a="huge";console.log(a)});
 //# sourceMappingURL=all.js.map
