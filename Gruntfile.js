@@ -121,42 +121,23 @@ module.exports = function (grunt) {
 
 
     /* js */
-    // 生成したいファイルの数だけタスクを記述
-    concat: {
-      options : {
-        sourceMap :true
-      },
-      all: {
-        src: ['<%= path.js_src %>*.js'],
-        dest: '<%= path.dist %>js/all.js'
-      },
-      sample: {
-        src: ['<%= path.js_src %>huge.js', '<%= path.js_src %>hoge.js'],
-        dest: '<%= path.dist %>js/sample.js'
+    browserify: {
+      app: {
+        files: {
+          '<%= path.dist %>/js/app.js': '<%= path.js_src %>/app.js'
+        }
       }
     },
 
-    // 生成したいファイルの数だけタスクを記述
     uglify: {
-      options: {
-        sourceMap : true,
-        sourceMapIncludeSources : true
-      },
       all: {
-        options: {
-          sourceMapIn : ['<%= path.dist %>js/all.js.map']
-        },
-        files: {
-          '<%= path.dist %>js/all.js': ['<%= path.dist %>js/all.js']
-        }
-      },
-      sample: {
-        options: {
-          sourceMapIn : ['<%= path.dist %>js/sample.js.map']
-        },
-        files: {
-          '<%= path.dist %>js/sample.js': ['<%= path.dist %>js/sample.js']
-        }
+        files: [{
+            expand: true,
+            cwd: '<%= path.dist %>js/',
+            src: ['*.js', '!*.min.js'],
+            dest: '<%= path.dist %>js/',
+            ext: '.min.js'
+        }]
       }
     },
 
@@ -187,19 +168,19 @@ module.exports = function (grunt) {
 
     watch: {
       html: {
-        files: ['**/*.{hbs,json,yml}'],
+        files: ['src/**/*.{hbs,json,yml}'],
         tasks: ['build:html']
       },
       css: {
-        files: ['**/*.scss'],
+        files: ['src/**/*.scss'],
         tasks: ['build:css'],
       },
       js: {
-        files: ['**/*.js'],
+        files: ['src/**/*.js'],
         tasks: ['build:js']
       },
       img: {
-        files: ['**/*.{png,jpg}'],
+        files: ['src/**/*.{png,jpg}'],
         tasks: ['build:img']
       },
       options: {
@@ -221,7 +202,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build:html', ['assemble']);
   grunt.registerTask('build:css', ['sprite', 'sass', 'autoprefixer', 'csscomb', 'csso']);
-  grunt.registerTask('build:js', ['concat', 'uglify']);
+  grunt.registerTask('build:js', ['browserify', 'uglify']);
   grunt.registerTask('build:img', ['copy']);
   grunt.registerTask('build', ['clean', 'build:html', 'build:css', 'build:js', 'build:img']);
   grunt.registerTask('default', ['build']);
