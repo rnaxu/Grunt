@@ -187,19 +187,19 @@ module.exports = function (grunt) {
 
     watch: {
       html: {
-        files: ['**/*.{hbs,json,yml}'],
+        files: ['src/**/*.{hbs,json,yml}'],
         tasks: ['build:html']
       },
       css: {
-        files: ['**/*.scss'],
+        files: ['src/**/*.scss'],
         tasks: ['build:css'],
       },
       js: {
-        files: ['**/*.js'],
+        files: ['src/**/*.js'],
         tasks: ['build:js']
       },
       img: {
-        files: ['**/*.{png,jpg}'],
+        files: ['src/**/*.{png,jpg}'],
         tasks: ['build:img']
       },
       options: {
